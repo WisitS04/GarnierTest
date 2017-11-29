@@ -13,7 +13,7 @@ class BankListCollectionView: UICollectionView
     var debiteBankList: [Bank] = []
     var companyList: [Bank] = []
     var typeSelect : Int = 1
-    var statusGuideAddCard: Bool = false
+    var versionGuideAddCard: Double = 0.00
     
     func SetUp(viewController: AddCardController) {
         self.viewController = viewController
@@ -203,8 +203,8 @@ extension BankListCollectionView
                     self.reloadData()
                     print("Call Company service success")
                     LoadingOverlay.shared.hideOverlayView()
-                    self.statusGuideAddCard = StatusGuideAddCard.bool(forKey: KEYGuideAddCard)
-                    if(!self.statusGuideAddCard){
+                    self.versionGuideAddCard = VersionGuideAddCard.double(forKey: KEYGuideAddCard)
+                    if(cerrentVersin != self.versionGuideAddCard){
                         self.viewController!.finishCallService()
                     }
                 case .failure(let error):

@@ -89,7 +89,7 @@ class GuideForAddCard
     
     @objc func sendActionData(_ sender: Any)  {
             Hide()
-            StatusGuideAddCard.set(true,forKey: KEYGuideAddCard)
+            VersionGuideAddCard.set(cerrentVersin,forKey: KEYGuideAddCard)
     }
     
     

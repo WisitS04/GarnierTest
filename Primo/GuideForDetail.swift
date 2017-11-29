@@ -149,9 +149,9 @@ class GuideForDetail
     @objc func sendActionData(_ sender: Any)  {
         Hide()
         if(devCount > 0){
-            StatusGuideDetail.set(true,forKey: KEYGuideDetail)
+            VersionGuideDetail.set(cerrentVersin,forKey: KEYGuideDetail)
         }else{
-            StatusGuideDetailNotDep.set(true,forKey: KEYGuideNotDepDetail)
+            VersionGuideDetailNotDep.set(cerrentVersin,forKey: KEYGuideNotDepDetail)
         }
         
 

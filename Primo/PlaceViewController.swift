@@ -9,7 +9,7 @@ class PlaceViewController: UITableViewController{
     // MARK: - Properties
     @IBOutlet weak var menuButton: UIBarButtonItem!
     
-    let searchController = UISearchController(searchResultsController: nil)
+    var searchController = UISearchController(searchResultsController: nil)
     
     let locManager = CLLocationManager()
     
@@ -37,7 +37,7 @@ class PlaceViewController: UITableViewController{
     var projectToken: String = "1a4f60bd37af4cea7b199830b6bec468"
     
     var version: Double = 0.0
-    var statusGuideNeayBy: Bool = false
+    var versionNearby: Double = 0.0
     var statusDrawTable:Bool = false
     
     var newCard: [PrimoCard] = []
@@ -63,7 +63,7 @@ class PlaceViewController: UITableViewController{
         self.navigationController?.navigationBar.isTranslucent = false
         statusDrawTable = false
         version = VersionNumber.double(forKey: KEYAppVersion)
-        statusGuideNeayBy  = StatusGuideNeayBy.bool(forKey: KEYGuideNeayBy)
+        versionNearby  = VersionGuideNearby.double(forKey: KEYGuideNeayBy)
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.setHidesBackButton(true, animated:true);
@@ -72,7 +72,7 @@ class PlaceViewController: UITableViewController{
             CheckAppVersion()
         }else{
             
-            if(!statusGuideNeayBy){
+            if(cerrentVersin != versionNearby){
                 GuideForNearby.shared.Show(view: self.view, navigationController: self.navigationController!, storyboard: self.storyboard! ,statusDrawTable: statusDrawTable)
                 
             }
@@ -121,21 +121,37 @@ class PlaceViewController: UITableViewController{
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
         
+//        self.searchController.searchBar.endEditing(true)
+//        self.searchController.isActive = false
+        
         if(segue.identifier == "ShowPlaceDetail")
         {
             if let indexPath = tableView.indexPathForSelectedRow
             {
-//                self.searchController.searchBar.endEditing(true)
-//                self.searchController.isActive = false
+              
                 
                 let detailView = segue.destination as! DetailViewController
                 
                 var place: Place
                 if searchController.isActive && searchController.searchBar.text != "" {
-                    place = filteredPlace[indexPath.row]
+                   place = filteredPlace[indexPath.row]
+                    
+//                    nearByPlace.removeAll()
+//                    for item in filteredPlace {
+//                        nearByPlace.append(item)
+//                    }
+//                    self.tableView.reloadData()
+//                    place = nearByPlace[indexPath.row]
+  
                 } else {
                     place = nearByPlace[indexPath.row]
                 }
+
+//                searchController.searchBar.removeFromSuperview()
+//                searchController = UISearchController(searchResultsController: nil)
+//                SetupSearchBar()
+           
+ 
                 detailView.selectedPlace = place
                 
                 let uuid = UIDevice.current.identifierForVendor!.uuidString
@@ -147,15 +163,26 @@ class PlaceViewController: UITableViewController{
                 Mixpanel.mainInstance().identify(distinctId: uuid)
                 
                 
+//                self.searchController.definesPresentationContext = true
+//                self.searchController.searchBar.endEditing(true)
+//                self.searchController.dimsBackgroundDuringPresentation = true
+                
+//                self.searchController.searchBar.endEditing(true)
+//                self.searchController.isActive = false
 //                self.revealViewController().setFrontViewPosition(.left, animated: true)
             }
         }
     }
     
+
+    
+    
     // MARK: - Destructor
     deinit {
         self.searchController.view.removeFromSuperview()
     }
+    
+  
     
     // MARK: - Table View
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -168,6 +195,7 @@ class PlaceViewController: UITableViewController{
         }
         return nearByPlace.count
     }
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NearByCell", for: indexPath as IndexPath)
@@ -221,6 +249,9 @@ class PlaceViewController: UITableViewController{
 // MARK: Search Bar
 extension PlaceViewController: UISearchResultsUpdating, UISearchBarDelegate
 {
+    
+ 
+    
     func SetupSearchBar()
     {
         searchController.searchResultsUpdater = self
@@ -230,6 +261,10 @@ extension PlaceViewController: UISearchResultsUpdating, UISearchBarDelegate
         searchController.searchBar.placeholder = "ค้นหาร้านค้า, ร้านอาหาร, สถานที่"
         definesPresentationContext = true
         self.tableView.tableHeaderView = searchController.searchBar
+        
+        
+        
+        print("")
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -259,14 +294,14 @@ extension PlaceViewController: UISearchResultsUpdating, UISearchBarDelegate
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        self.tableView.contentInset = UIEdgeInsetsMake(65, 0, 0, 0)
         searchText = ""
         isClickSh = true
-
+        print("")
         if (self.isRefreshing) {
             self.refreshControl?.endRefreshing()
             self.isRefreshing = false
         }
-        
         GetLocation();
 //        CallWS()
     }
@@ -385,7 +420,7 @@ extension PlaceViewController
         let parameters: Parameters = ["lat": nLocationlat,
                                       "long": nLocationLong,
                                       "page": 1,
-                                      "pageSize": 15,
+                                      "pageSize": 25,
                                       "search": searchkey]
 
         Alamofire.request(url, parameters: parameters)
@@ -782,5 +817,6 @@ extension PlaceViewController
             self.navigationController?.pushViewController(secondViewController, animated: true)
 
     }
+    
     
 }

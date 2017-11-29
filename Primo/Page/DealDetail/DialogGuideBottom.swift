@@ -86,7 +86,7 @@ class DialogGuideBottom
     
     @objc func sendActionData(_ sender: Any)  {
         Hide()
-        StatusGuideDeals.set(true,forKey: KEYGuideDeals)
+        VersionGuideDeals.set(cerrentVersin,forKey: KEYGuideDeals)
     }
     
     

@@ -94,7 +94,9 @@ class GuideForNearby
             let secondViewController = myStotybord?.instantiateViewController(withIdentifier: "AddCardController") as! AddCardController
             myNavigationController?.pushViewController(secondViewController, animated: true)
             
-            StatusGuideNeayBy.set(true,forKey: KEYGuideNeayBy)
+
+
+            VersionGuideNearby.set(cerrentVersin,forKey: KEYGuideNeayBy)
         }
     }
     
